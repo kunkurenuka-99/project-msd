@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Voting System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .party-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        .party-option input {
+            width: auto;
+            margin-right: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            background-color: #eee;
+            cursor: pointer;
+            margin-right: 5px;
+            border-radius: 4px 4px 0 0;
+        }
+        .tab.active {
+            background-color: white;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .success-message {
+            color: #27ae60;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>National Voting System</h1>
+    </div>
+
+    <div class="container">
+        <!-- Login Section -->
+        <div id="loginSection" class="card">
+            <h2>Voter Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="voterId">Voter ID</label>
+                    <input type="text" id="voterId" required placeholder="Enter your voter ID">
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+
+        <!-- Main Voting Section (hidden until login) -->
+        <div id="mainSection" class="hidden">
+            <div class="tab-container">
+                <div class="tab active" data-tab="vote">Vote</div>
+                <div class="tab" data-tab="feedback">Feedback</div>
+            </div>
+
+            <!-- Voting Tab -->
+            <div id="voteTab" class="tab-content active">
+                <div class="card">
+                    <h2>Cast Your Vote</h2>
+                    <form id="voteForm">
+                        <div class="form-group">
+                            <label>Select your preferred party:</label>
+                            
+                            <div class="party-option">
+                                <input type="radio" id="party1" name="party" value="Party A" required>
+                                <label for="party1">Party A</label>
+                            </div>
+                            
+                            <div class="party-option">
+                                <input type="radio" id="party2" name="party" value="Party B">
+                                <label for="party2">Party B</label>
+                            </div>
+                            
+                            <div class="party-option">
+                                <input type="radio" id="party3" name="party" value="Party C">
+                                <label for="party3">Party C</label>
+                            </div>
+                            
+                            <div class="party-option">
+                                <input type="radio" id="party4" name="party" value="Party D">
+                                <label for="party4">Party D</label>
+                            </div>
+                            
+                            <button type="submit" class="btn">Submit Vote</button>
+                        </div>
+                    </form>
+                    <div id="voteSuccess" class="success-message hidden">
+                        Your vote has been successfully submitted!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Tab -->
+            <div id="feedbackTab" class="tab-content">
+                <div class="card">
+                    <h2>Provide Feedback</h2>
+                    <form id="feedbackForm">
+                        <div class="form-group">
+                            <label for="feedbackType">Feedback Type</label>
+                            <select id="feedbackType" required>
+                                <option value="">Select feedback type</option>
+                                <option value="suggestion">Suggestion</option>
+                                <option value="complaint">Complaint</option>
+                                <option value="praise">Praise</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="feedbackMessage">Your Feedback</label>
+                            <textarea id="feedbackMessage" rows="5" style="width: 100%; padding: 10px;" required placeholder="Please share your feedback..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Rating (optional)</label>
+                            <div style="display: flex; gap: 10px;">
+                                <span style="cursor: pointer;" data-rating="1">★</span>
+                                <span style="cursor: pointer;" data-rating="2">★</span>
+                                <span style="cursor: pointer;" data-rating="3">★</span>
+                                <span style="cursor: pointer;" data-rating="4">★</span>
+                                <span style="cursor: pointer;" data-rating="5">★</span>
+                            </div>
+                            <input type="hidden" id="feedbackRating" value="0">
+                        </div>
+                        <button type="submit" class="btn">Submit Feedback</button>
+                    </form>
+                    <div id="feedbackSuccess" class="success-message hidden">
+                        Thank you for your feedback!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Login Form
+            const loginForm = document.getElementById('loginForm');
+            const loginSection = document.getElementById('loginSection');
+            const mainSection = document.getElementById('mainSection');
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const voterId = document.getElementById('voterId').value;
+                const dob = document.getElementById('dob').value;
+                
+                // Simple validation
+                if (voterId && dob) {
+                    // In a real app, you would verify credentials with backend
+                    console.log('Login with:', voterId, dob);
+                    
+                    // Show main section
+                    loginSection.classList.add('hidden');
+                    mainSection.classList.remove('hidden');
+                }
+            });
+            
+            // Tab Switching
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab') + 'Tab';
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Voting Form
+            const voteForm = document.getElementById('voteForm');
+            const voteSuccess = document.getElementById('voteSuccess');
+            
+            voteForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const selectedParty = document.querySelector('input[name="party"]:checked').value;
+                
+                // In a real app, you would send this to your backend
+                console.log('Voted for:', selectedParty);
+                
+                // Show success message
+                voteSuccess.classList.remove('hidden');
+                voteForm.classList.add('hidden');
+                
+                // In a real app, you would disable voting after submission
+            });
+            
+            // Feedback Form
+            const feedbackForm = document.getElementById('feedbackForm');
+            const feedbackSuccess = document.getElementById('feedbackSuccess');
+            const ratingStars = document.querySelectorAll('[data-rating]');
+            const feedbackRating = document.getElementById('feedbackRating');
+            
+            // Star rating
+            ratingStars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = this.getAttribute('data-rating');
+                    feedbackRating.value = rating;
+                    
+                    // Update star display
+                    ratingStars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.style.color = '#f39c12';
+                        } else {
+                            s.style.color = '#ccc';
+                        }
+                    });
+                });
+            });
+            
+            feedbackForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const type = document.getElementById('feedbackType').value;
+                const message = document.getElementById('feedbackMessage').value;
+                const rating = feedbackRating.value;
+                
+                // In a real app, you would send this to your backend
+                console.log('Feedback:', {type, message, rating});
+                
+                // Show success message
+                feedbackSuccess.classList.remove('hidden');
+                feedbackForm.reset();
+                
+                // Reset stars
+                feedbackRating.value = '0';
+                ratingStars.forEach(star => {
+                    star.style.color = '#ccc';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
